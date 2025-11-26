@@ -144,7 +144,17 @@ public class ClientService {
     private ClientService() {}
 
     public static ClientService createInstance() { static 이먼저 싱글턴 private static 일때                                return clientService; // static 메서드가 객체를 반환
+명령 프롬프트에 검색
+절대경로 알아보기 C:
+..알리아싱?이라고생각해라 상대경로 
 
+
+
+
+
+
+
+절대경로 
 	
     }
 }```
