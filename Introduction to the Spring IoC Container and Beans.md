@@ -1,5 +1,6 @@
 🌱 Spring IoC Container와 Bean 소개
-Spring Framework는 자바 애플리케이션 개발에서 가장 널리 사용되는 프레임워크 중 하나입니다. 그 핵심에는 제어의 역전(Inversion of Control, IoC) 원칙을 구현한 IoC 컨테이너가 있습니다.(클래스다 ) 이 글에서는 Spring의 IoC 컨테이너와 Bean 개념에 대해 구체적으로 살펴보겠습니다.
+Spring Framework는 자바 애플리케이션 개발에서 가장 널리 사용되는 프레임워크 중 하나입니다. 그 핵심에는 제어의 역전(Inversion of Control, IoC) 
+원칙을 구현한 IoC 컨테이너가 있습니다.(클래스다 ) 이 글에서는 Spring의 IoC 컨테이너와 Bean 개념에 대해 구체적으로 살펴보겠습니다.
 🔹 타이트 커플링 예 (나쁜 예)     타이트 커플링처럼 너무 강하게 묶여 있으면 변경어렵다 루즈 커플링으로 !!!ioc 
 🔹 IoC(제어의 역전)
 “원래 내가 하던 일을 스프링이 대신 한다.”                     IoC → DI → 루즈 커플링
@@ -31,7 +32,8 @@ IoC는 객체 간의 의존성 관리에 대한 제어 권한을 애플리케이
  
 
 💉 IoC의 구체적인 구현: Dependency Injection(DI)
-Spring에서는 IoC의 구현 방법으로 DI(의존성 주입)를 사용합니다. DI는 객체가 스스로 의존 객체를 생성하거나 찾지 않고, 필요한 의존성을 외부에서 주입받는 방식입니다.
+Spring에서는 IoC의 구현 방법으로 DI(의존성 주입)를 사용합니다. DI는 객체가 스스로 의존 객체를 생성하거나 찾지 않고, 
+필요한 의존성을 외부에서 주입받는 방식입니다.
 
  
 
@@ -46,10 +48,11 @@ Constructor arguments  생성자 방식
         this.userRepository = userRepository;
         System.out.println("[UserService] 객체 생성 및 UserRepository 의존성 주입 완료.");
     }
-팩토리 메서드의 아규먼트(이 팩토리 메서드는 GoF의 Factory Method 디자인 패턴이 아님)@bean 있는 팩토리 메서드 public foo makeFoo(){ 이게 Factory Method 이다 
-                                                                                                                 return new Foo();  호출할때 AOP로나온다 
+팩토리 메서드의 아규먼트(이 팩토리 메서드는 GoF의 Factory Method 디자인 패턴이 아님)@bean 있는 팩토리 메서드``` public foo makeFoo(){ 이게 Factory Method 이다 
+                                                                                                                 return new Foo();```  호출할때 AOP로나온다 
 객체 생성 이후 설정되는 프로퍼티 (setter injection) 
 Spring IoC 컨테이너는 이러한 정의를 기반으로 bean을 생성하면서 의존 객체를 자동으로 주입합니다. 이 구조는 객체가 직접 의존 객체를 생성하거나 찾는 방식(Service Locator 패턴 등)과는 반대이며, 이 점에서 제어의 역전(Inversion of Control)이라 불립니다.
+```
 public class Main {
 
 	public static void main(String[] args) {
@@ -64,15 +67,15 @@ public class Main {
 
 	}
 
-}
+}```
 🏗️  Spring IoC 컨테이너의 핵심 패키지
 Spring IoC 컨테이너의 핵심 구현은 다음 두 패키지에 있습니다:
 
-org.springframework.beans       라브이러리에있는 pom -spring context 오픈소스다운받으면 나옴  
+```org.springframework.beans       라브이러리에있는 pom -spring context 오픈소스다운받으면 나옴  
 org.springframework.context
  
 
-⚙️ BeanFactory vs ApplicationContext
+⚙️ BeanFactory vs ApplicationContext```
 🧰 BeanFactory
 
 Spring IoC 컨테이너의 가장 기본적인 인터페이스
