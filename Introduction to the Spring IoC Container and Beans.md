@@ -134,6 +134,19 @@ Annotation 기반 자동 감지 (@Component, @Service, @Repository 등)이거 �
  
 
 ✅ 요약
-Spring의 IoC 컨테이너는 객체 생명주기와 의존성 관리를 프레임워크 차원에서 처리함으로써, 애플리케이션의 유연성과 테스트 용이성을 크게 향상시켜줍니다. 이 개념은 Spring을 제대로 이해하기 위한 첫 관문이기도 하니, 확실히 익혀두시길 바랍니다! 💪
+Spring의 IoC 컨테이너는 객체 생명주기와 의존성 관리를 프레임워크 차원에서 처리함으로써,
+애플리케이션의 유연성과 테스트 용이성을 크게 향상시켜줍니다.
+이 개념은 Spring을 제대로 이해하기 위한
+첫 관문이기도 하니, 확실히 익혀두시길 바랍니다! 💪
+```
+public class ClientService {
+    private static ClientService clientService = new ClientService();
+    private ClientService() {}
 
- 
+    public static ClientService createInstance() { static 이먼저 싱글턴 private static 일때                                return clientService; // static 메서드가 객체를 반환
+
+	
+    }
+}```
+
+ public 메서드 호출하면 private static final 클라인서비스 호출되면서 인스턴스가 만들어지고 
