@@ -7,10 +7,11 @@ Spring Framework는 자바 애플리케이션 개발에서 가장 널리 사용�
 “스프링이 객체를 만들어서 필요한 곳에 넣어준다.”
 🔹 루즈 커플링
 “그래서 클래스들이 서로 딱 붙지 않고 느슨하게 연결된다.”
+```
 public class OrderService {
     private MySQLRepository repo = new MySQLRepository();
 }
-
+```
 OrderService는 MySQLRepository에 딱 묶여 있음
 
 MySQL → Oracle로 바꾸면 코드 수정해야 함
