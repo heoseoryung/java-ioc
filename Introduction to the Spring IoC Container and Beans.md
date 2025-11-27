@@ -160,3 +160,189 @@ public class ClientService {
 }```
 
  public 메서드 호출하면 private static final 클라인서비스 호출되면서 인스턴스가 만들어지고 
+
+
+properties +필드+객
+
+
+디폴트<value>
+
+client.set tatgetname(target bean.getclass().getsimplename; 체이닝 메서드 호출 세개으 ㅣ스테이먼트를 하나으 ㅣ스테이먼트로 해결할수있음 
+
+스트림=>특정파일읽고씀
+// 다음 두 필드로 컨테이너에 의해서 필드 주입이 된다.
+	@Value("${jdbc.driver.className}")
+    private String driverClassName;
+
+    @Value("${jdbc.url}")
+    private String url;
+	
+	@Bean
+    public static PropertySourcesPlaceholderConfigurer properties() {
+        PropertySourcesPlaceholderConfigurer configurer = 
+        		new PropertySourcesPlaceholderConfigurer();
+        
+        //configurer.setLocation(example.properties);
+        
+        Properties properties = new Properties();
+        properties.setProperty("jdbc.driver.className", "com.mysql.cj.jdbc.Driver");마리아 db POSTGRESQL드라이버
+        properties.setProperty("jdbc.url", "jdbc:mysql://localhost:3306/testdb");//로컬호스트 도메인 이름이 127.0.0.1로 변환됨 (컴퓨터 자기자신을 가리키는 로컬호스트)ㅣocalhost:3306/내부적으로 돈다 루프백 loopback  밖으로 안나간다 os1,2로 가면 나간다 
+        configurer.setProperties(properties);
+        
+        return configurer;
+    }	
+
+    @Bean
+    public DataSource myDataSource() throws ClassNotFoundException {
+    	// Simple implementation of the standard JDBC javax.sql.DataSource interface, 
+    	// configuring a plain old JDBC java.sql.Driver via bean properties, 
+    	// and returning a new java.sql.Connection from every getConnection call.
+    	SimpleDriverDataSource dataSource = new SimpleDriverDataSource();   데이터 소스를 구현한 
+    	
+    	//Class 클래스를 자주 언급함 : reflection 관련클래스
+    	
+    	dataSource.setDriverClass((Class<? extends java.sql.Driver>) Class.forName(driverClassName));
+    	dataSource.setUrl(url);
+        dataSource.setUsername("root");
+        dataSource.setPassword("1234");
+//        dataSource.getConnection();
+        return dataSource;
+    }
+}
+
+@Configuration
+public class AppConfig {
+	
+	@Bean
+    public TargetBean theTargetBean() {
+        return new TargetBean();
+    }
+
+    @Bean
+    public ClientBean theClientBean(/*TargetBean targetBean*/) {
+        ClientBean client = new ClientBean();
+//        client.setTargetName(targetBean.getClass().getSimpleName()); // Bean 이름 설정
+        client.setTargetName("theTargetBean");
+        return client;
+    }
+    
+    @Bean
+    public ManagerBean theManagerBean() {
+    	ManagerBean managerBean = new ManagerBean();
+    	managerBean.setTargetBean(theTargetBean());이건 타겟 빈을 호출하는메서드가 아니
+    	managerBean.setClientBean(theClientBean());
+    	return managerBean;
+    }
+	
+}
+
+public class MainApplication {	
+	
+	public static void testPropertiesFile() {
+		
+		// Spring Framework 기반의 작업을 할때,
+		// 직접적으로 Properties 클래스를 사용할 일은 거의 없을 것
+		Properties properties = new Properties();
+
+        // 클래스패스 기준으로 properties 파일 읽기
+		// try resource catch
+        try (BufferedInputStream inputStream = 
+        		(BufferedInputStream) MainApplication.class.
+        		getClassLoader().getResourceAsStream("config.properties")) {
+
+            if (inputStream == null) {
+                System.out.println("config.properties 파일을 찾을 수 없습니다.");
+                return;
+            }
+
+            // Properties 로드
+            properties.load(inputStream);
+
+            // 값 읽기
+            String appName = properties.getProperty("app.name");
+            String appVersion = properties.getProperty("app.version");
+            String appAuthor = properties.getProperty("app.author");
+                        
+
+            // 출력
+            System.out.println("App Name    : " + appName);
+            System.out.println("App Version : " + appVersion);
+            System.out.println("App Author  : " + appAuthor);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+	}
+	
+	public static void main(String[] args) throws SQLException, IOException {
+		
+		testPropertiesFile();
+	
+		ApplicationContext context = 
+				new AnnotationConfigApplicationContext(AppConfig.class);
+		
+		DataSource dataSource = context.getBean(DataSource.class);
+		
+		System.out.println(dataSource.getConnection());
+	}
+}
+
+public class AppConfig {
+
+    // Define MovieFinder bean
+    @Bean
+    public MovieFinder movieFinder() {
+        return new SimpleMovieFinder();
+    }
+
+    // Define SimpleMovieLister bean
+    @Bean
+    public SimpleMovieLister movieLister(/*MovieFinder movieFinder*/) {
+    	SimpleMovieLister movieLister = new SimpleMovieLister();
+        movieLister.setMovieFinder(movieFinder()); // Setter-based DI
+        return movieLister;
+        
+        //return new SimpleMovieLister(movieFinder);
+    }
+    
+    // @Value 어노테이션으로 주입되려면, 반드시 다음 configure가 필요함!
+    // Placeholder? 란? : 구글 검색창에 디폴트로 나타나는 "Google 검색 또는 URL 입력" 이 스트링을 플레이스홀더
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+        // 절대 경로=C:\development\Workspace\codes\spring_legacy\SpringIoCDemos\src\main\resources\example.properties
+        // The default class loader will be used for loading the resource.
+        configurer.setLocation(new ClassPathResource("example.properties"));
+        return configurer;
+    }
+}
+ASSOCIATION 연관관계 나옴 논리적연결 uml 릴레이션 구글= 프로필보기
+방향성
+종속적-케스케이드 
+집계모델
+트랜잭션
+부모를통해서만 외부에서 ->AGGREGATE 하나의 트랜잭션  엔티티 조작
+도메인은 비즈니스가 해결하고자하는 문제 영역전체
+DDD AGGRE모델과 같음 
+many to many 관계는 만들면 xxxx
+
+
+비교 연관vs의존=연관관계만생각함..ㅎ 
+프록시 가짜  공통관심사=나온게프록시
+log=콘솔에출력 하는걸 기록하는거
+
+자바 다이나믹 프록시 //리프렉션 파트 만gtp
+클라이언트 에서-프록시 진짜 서비스 두가지중에서 서비스말고 프록시에(공통관심사) 기능을 넣음 +프록시안에다가 진짜서비스 부르는 메서드 무조건 들어가야함 
+진짜 서비스는 특정 인터페이스를 (임의 인터페이스를 구현해야함 )
+프록시를 런타임때 서비스에서 오버라이드기능사용해서 기능추가 (공통관심사)
+cglib=인터페이스가없거나 
+
+aspevtj 공통관심사를 타켓클래스에게 넣기위해 프록시같은것이 필요없지?공통관리정리할려고
+public void xxx(){
+int a=0;
+
+싱글턴stateless 상태가 없다  stateful 상태가 있음 (존재있음)재사용중 공유중 충돌될까봐
+싱글톤 주입하면 한번생성하고 ->필요할때마다 새인스턴스 생성
+
+
